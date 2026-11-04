@@ -858,24 +858,59 @@
 }
 
 /* ------------------------------------------------------------------ map */
-.leaflet-container {
+.maplibregl-map {
   font-family: var(--font-sans);
-  background: #d9e6ea;
+  background: var(--surface-2);
   isolation: isolate;
   z-index: 0;
 }
-.leaflet-control-attribution {
-  font-size: 10px;
-}
-.leaflet-control-zoom {
-  border: 1px solid var(--line) !important;
-  border-radius: 10px !important;
+/* MapLibre's stylesheet loads after this one, so these lead with .maplibregl-map to win. */
+.maplibregl-map .maplibregl-ctrl-group:not(:empty) {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: none !important;
+  box-shadow: none;
+}
+.maplibregl-map .maplibregl-ctrl-group button + button {
+  border-top: 1px solid var(--line);
+}
+.maplibregl-map .maplibregl-ctrl-icon,
+.maplibregl-map .maplibregl-ctrl-attrib-button {
+  opacity: 0.7;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .maplibregl-map :is(.maplibregl-ctrl-icon, .maplibregl-ctrl-attrib-button) {
+    filter: invert(1);
+  }
+}
+:root[data-theme='dark'] .maplibregl-map :is(.maplibregl-ctrl-icon, .maplibregl-ctrl-attrib-button) {
+  filter: invert(1);
+}
+.maplibregl-map .maplibregl-ctrl.maplibregl-ctrl-attrib {
+  font-size: 10px;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: none;
+}
+.maplibregl-map .maplibregl-ctrl-attrib a {
+  color: inherit;
+}
+.maplibregl-map .maplibregl-ctrl-attrib-button,
+.maplibregl-map .maplibregl-ctrl-attrib.maplibregl-compact-show .maplibregl-ctrl-attrib-button {
+  background-color: transparent;
 }
 .landed-pin {
   background: none;
   border: 0;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.landed-pin:hover,
+.landed-pin:focus-visible {
+  z-index: 10 !important;
 }
 .landed-pin:focus-visible {
   outline: none;
@@ -910,6 +945,35 @@
       top: 70%;
     }
   }
+}
+.landed-you {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--tide);
+  border: 3px solid #fff;
+  box-sizing: border-box;
+  box-shadow:
+    0 0 0 7px color-mix(in srgb, var(--tide) 18%, transparent),
+    0 1px 3px rgba(15, 42, 51, 0.3);
+  pointer-events: none;
+  z-index: 0;
+}
+.landed-you-label {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(15, 42, 51, 0.18);
 }
 
 @media print {

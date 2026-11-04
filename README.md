@@ -8,7 +8,7 @@ All people, prices and places in the seed data are **sample data** until the pil
 
 - React 18, Vite, TypeScript, Tailwind 4, React Router, TanStack Query
 - Supabase: Auth (email and password), Postgres with row-level security, Storage (batch photos), Realtime (live pins and orders), pg_cron (nightly Price Index)
-- Leaflet with OpenStreetMap tiles, Recharts, qrcode.react, html5-qrcode
+- MapLibre with OpenFreeMap vector tiles (OpenStreetMap data), Recharts, qrcode.react, html5-qrcode
 - Vercel: the web app plus one edge function, `api/label.ts`, which handles label lookups
 
 ## Run it locally
@@ -128,7 +128,7 @@ supabase/tests/              local Postgres test harness and checks
 
 ## Before the pilot
 
-- Use a paid map tile provider instead of the public OpenStreetMap tiles.
+- The map uses OpenFreeMap (free, no key, no usage cap, but no uptime guarantee). If the pilot needs one, self-host the tiles or move to a paid provider.
 - Set `checks.demo_skip_photo_place` to `false` in `supabase/thresholds.sql`.
 - Replace the sample product season months with real DFO and provincial seasons.
 - Check Canadian privacy rules for seller and buyer data, and add a privacy notice to sign-up.

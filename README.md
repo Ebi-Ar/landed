@@ -47,7 +47,7 @@ Vercel deploys from GitHub as before. In **Project → Settings → Environment 
 | --- | --- |
 | `VITE_SUPABASE_URL` | Browser |
 | `VITE_SUPABASE_ANON_KEY` | Browser. This public key is limited by row-level security. |
-| `VITE_PUBLIC_URL` | The domain printed in QR labels, e.g. `https://landed.vercel.app` |
+| `VITE_PUBLIC_URL` | The domain printed in QR labels, e.g. `https://landed-nb.vercel.app` |
 | `VITE_DEMO_LOGINS` | `true` shows the demo sign-in buttons; set `false` for the pilot |
 | `SUPABASE_URL` | Label API, server side |
 | `SUPABASE_SERVICE_ROLE_KEY` | Label API, server side only. Never prefix it with `VITE_`. |
@@ -99,7 +99,7 @@ Buyers get an email when they order and at each status change. This is off until
 
 1. Database → Extensions: enable `pg_net`.
 2. In the SQL editor: `select vault.create_secret('<resend api key>', 'resend_api_key');`
-3. Optional: `insert into private.settings values ('email.from', '"Landed <orders@your-domain>"', null), ('site.url', '"https://landed.vercel.app"', null);`
+3. Optional: `insert into private.settings values ('email.from', '"Landed <orders@your-domain>"', null), ('site.url', '"https://landed-nb.vercel.app"', null);`
 
 Sample accounts (`@example.com`) never get email.
 

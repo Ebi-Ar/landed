@@ -37,7 +37,7 @@ do $$
 declare v int;
 begin
   select count(*) into v from public.seller_directory;           assert v = 6, 'anon sees 6 approved sellers, got ' || v;
-  select count(*) into v from public.batches where status = 'live'; assert v = 10, 'anon sees 10 live batches, got ' || v;
+  select count(*) into v from public.batches where status = 'live'; assert v = 11, 'anon sees 11 live batches, got ' || v;
   select count(*) into v from public.price_index_daily;          assert v > 250, 'anon reads the price index';
   select count(*) into v from public.markets;                    assert v = 2;
   -- Denise has "Show my phone number" off.
@@ -96,7 +96,7 @@ begin
   select count(*) into v from public.orders;                 assert v = 4, 'Marc sees his 4 orders (incl. the new one), sees ' || v;
   select count(*) into v from public.orders where id = 1044; assert v = 0, 'Marc cannot see Lise''s order';
   select count(*) into v from public.seller_credentials;     assert v = 2, 'Marc sees only his own credentials';
-  select count(*) into v from public.labels;                 assert v = 53, 'Marc sees his 53 labels, got ' || v;
+  select count(*) into v from public.labels;                 assert v = 54, 'Marc sees his 54 labels, got ' || v;
   select count(*) into v from public.labels where status = 'blank'; assert v = 50, 'Marc has 50 blank labels';
 
   select code into marc_blank from public.labels where status = 'blank' order by code limit 1;
@@ -161,7 +161,7 @@ do $$
 declare v int;
 begin
   select count(*) into v from public.batches where status = 'held'; assert v = 0, 'held batches are not public';
-  select count(*) into v from public.batches where status = 'live'; assert v = 11, 'new live batch is public, got ' || v;
+  select count(*) into v from public.batches where status = 'live'; assert v = 12, 'new live batch is public, got ' || v;
   assert (select available_now from public.seller_directory where display_name = 'Marc Leblanc') = false, 'pin outlined for everyone';
   assert (select phone from public.seller_directory where display_name = 'Marc Leblanc') is null, 'phone hidden when switched off';
 end $$;
@@ -253,7 +253,7 @@ do $$
 declare v int;
 begin
   select count(*) into v from public.orders;  assert v = 4, 'seed orders restored, got ' || v;
-  select count(*) into v from public.batches where status = 'live'; assert v = 10, 'seed batches restored';
+  select count(*) into v from public.batches where status = 'live'; assert v = 11, 'seed batches restored';
   assert (select available_now from public.seller_locations l join public.sellers s on s.id = l.seller_id where s.display_name = 'Marc Leblanc'), 'Marc available again';
   assert (select count(*) from public.labels where seller_id = (select id from public.sellers where display_name = 'Marc Leblanc') and status = 'blank') = 50, 'demo roll back to 50';
   assert exists (select 1 from public.sellers where display_name = 'Nora Gallant'), 'real sign-ups keep their seller account';

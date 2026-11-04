@@ -120,7 +120,7 @@ export function AppShell() {
   const selling = pathname.startsWith('/sell')
   const tabs = useTabs(selling)
   const { isAdmin } = useAuth()
-  const wide = pathname === '/map' || pathname.startsWith('/admin')
+  const wide = pathname === '/map' || pathname === '/prices' || pathname.startsWith('/admin')
 
   return (
     <div className="min-h-dvh">

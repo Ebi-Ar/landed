@@ -1,10 +1,13 @@
-import { useMemo, useState } from 'react'
+import { lazy, Suspense, useMemo, useState } from 'react'
 import { PriceIndexList, Ticker } from '@/components/PriceIndexList'
 import { Chips, ErrorNote, Loading, PageTitle, SampleNote } from '@/components/ui'
 import { useLiveBatches, usePriceIndex } from '@/lib/queries'
 import { FAIR_NOTE } from '@/lib/prices'
 
+const MarketBoard = lazy(() => import('@/components/MarketBoard'))
+
 type Filter = 'all' | 'sea' | 'land'
+const SCOPE: Record<Filter, string> = { all: 'All foods', sea: 'From the sea', land: 'From the land' }
 
 /** Buyer view of the Landed Price Index. */
 export default function Prices() {
@@ -12,6 +15,7 @@ export default function Prices() {
   const batches = useLiveBatches()
   const [filter, setFilter] = useState<Filter>('all')
   const all = useMemo(() => Object.values(summary ?? {}).sort((a, b) => a.product.sort - b.product.sort), [summary])
+  const items = useMemo(() => all.filter((s) => filter === 'all' || s.product.category === filter), [all, filter])
   const forSale = useMemo(() => {
     const m: Record<string, number> = {}
     for (const b of batches.data ?? []) m[b.product_id] = (m[b.product_id] ?? 0) + 1
@@ -37,7 +41,13 @@ export default function Prices() {
               ['land', 'From the land'],
             ]}
           />
-          <PriceIndexList items={all.filter((s) => filter === 'all' || s.product.category === filter)} forSale={forSale} base="/prices" />
+          {items.length > 0 && (
+            <Suspense fallback={<div className="card h-[420px] animate-pulse" />}>
+              <MarketBoard items={items} scope={SCOPE[filter]} />
+            </Suspense>
+          )}
+          <h2 className="mt-2">Fair price ranges</h2>
+          <PriceIndexList items={items} forSale={forSale} base="/prices" className="lg:grid lg:grid-cols-2" />
         </>
       )}
       <div className="card">

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ChangeArrow, ChangeText } from './FairBadge'
 import { Sparkline } from './Sparkline'
+import { cn } from '@/lib/cn'
 import { money } from '@/lib/format'
 import type { PriceSummary } from '@/lib/prices'
 
@@ -17,9 +18,19 @@ export function Ticker({ items }: { items: PriceSummary[] }) {
 }
 
 /** One row per product: fair range, change, data strength, sparkline. */
-export function PriceIndexList({ items, forSale, base }: { items: PriceSummary[]; forSale?: Record<string, number>; base: string }) {
+export function PriceIndexList({
+  items,
+  forSale,
+  base,
+  className,
+}: {
+  items: PriceSummary[]
+  forSale?: Record<string, number>
+  base: string
+  className?: string
+}) {
   return (
-    <div className="flex flex-col gap-2.5">
+    <div className={cn('flex flex-col gap-2.5', className)}>
       {items.map((s) => {
         const n = forSale?.[s.product.slug] ?? 0
         return (

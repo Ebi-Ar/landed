@@ -12,6 +12,8 @@ export interface PriceSummary {
   reports: number
   /** Daily averages for the last 30 days, oldest first. */
   history: number[]
+  /** The date (YYYY-MM-DD) of each history point. */
+  days: string[]
   strength: Strength
 }
 
@@ -54,6 +56,7 @@ export function summarize(rows: IndexRow[], products: Product[]): Record<string,
       sales: Number(today.sales_count),
       reports: Number(today.report_count),
       history: list.slice(-30).map((r) => Number(r.avg)),
+      days: list.slice(-30).map((r) => r.date),
       strength: strengthOf(n),
     }
   }

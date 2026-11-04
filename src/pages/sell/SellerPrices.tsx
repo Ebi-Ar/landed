@@ -1,9 +1,11 @@
-import { useMemo, useState } from 'react'
+import { lazy, Suspense, useMemo, useState } from 'react'
 import { PriceIndexList, Ticker } from '@/components/PriceIndexList'
 import { Chips, ErrorNote, Loading, PageTitle, SampleNote } from '@/components/ui'
 import { useAuth } from '@/lib/auth'
 import { usePriceIndex, useSellerProducts } from '@/lib/queries'
 import { FAIR_NOTE } from '@/lib/prices'
+
+const MarketBoard = lazy(() => import('@/components/MarketBoard'))
 
 /** Full Landed Price Index for sellers: my products or all products. */
 export default function SellerPrices() {
@@ -34,6 +36,11 @@ export default function SellerPrices() {
               ['all', 'All products'],
             ]}
           />
+          {items.length > 0 && (
+            <Suspense fallback={<div className="card h-[420px] animate-pulse" />}>
+              <MarketBoard items={items} scope={scope === 'mine' ? 'Your foods' : 'All foods'} />
+            </Suspense>
+          )}
           <PriceIndexList items={items} base="/sell/prices" />
           {!items.length && <p className="sub">No prices for your products yet.</p>}
         </>

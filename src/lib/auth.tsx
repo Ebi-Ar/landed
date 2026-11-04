@@ -90,7 +90,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       refreshMe: () => me.refetch(),
       async signIn(email, password) {
         const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password })
-        if (error) throw new Error(error.message === 'Invalid login credentials' ? 'That email and password don’t match.' : error.message)
+        if (error) {
+          if (error.message === 'Invalid login credentials') throw new Error('That email and password don’t match.')
+          if (/email not confirmed/i.test(error.message))
+            throw new Error('Confirm your email first: open the link Landed sent to your inbox (check spam too), then sign in again.')
+          throw new Error(error.message)
+        }
       },
       async signUp(email, password, fullName, phone) {
         const { data, error } = await supabase.auth.signUp({

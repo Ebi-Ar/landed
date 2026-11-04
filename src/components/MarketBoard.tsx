@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { buildBoard, dayLabel, pctText, RANGE_WORDS, type Board, type BoardRange } from '@/lib/board'
 import { ChangeArrow } from './FairBadge'
-import { money } from '@/lib/format'
+import { byFoodGroup, money } from '@/lib/format'
 import type { PriceSummary } from '@/lib/prices'
 
 /** At most four foods in colour at once, so every line stays easy to tell apart. */
@@ -35,8 +35,21 @@ function Change({ v }: { v: number }) {
  * The market board: every food on one chart as % change, with the Landed Food
  * Index (the average of them all) on top. Pick up to four foods to compare.
  */
-export default function MarketBoard({ items, scope }: { items: PriceSummary[]; scope: string }) {
-  const [range, setRange] = useState<BoardRange>(START)
+export default function MarketBoard({
+  items,
+  scope,
+  range: rangeProp,
+  onRange,
+}: {
+  items: PriceSummary[]
+  scope: string
+  /** Pass these to keep the range when the board is remounted. */
+  range?: BoardRange
+  onRange?: (r: BoardRange) => void
+}) {
+  const [ownRange, setOwnRange] = useState<BoardRange>(START)
+  const range = rangeProp ?? ownRange
+  const setRange = onRange ?? setOwnRange
   // Colour follows the food: it keeps its colour until you drop it.
   const [picked, setPicked] = useState<Picked>(() => topMovers(items))
   const [full, setFull] = useState(false)
@@ -44,6 +57,7 @@ export default function MarketBoard({ items, scope }: { items: PriceSummary[]; s
   const board = useMemo(() => buildBoard(items, range), [items, range])
   const today = items.map((s) => s.date).sort().at(-1)
   const shown = items.filter((s) => picked[s.product.slug] != null)
+  const groups = useMemo(() => byFoodGroup(items, (s) => s.product.food_group), [items])
   const rest = items.filter((s) => picked[s.product.slug] == null)
 
   function toggle(slug: string) {
@@ -219,20 +233,27 @@ export default function MarketBoard({ items, scope }: { items: PriceSummary[]; s
             <span className="small font-semibold">Compare up to {SLOTS}</span>
             <span className="small">{RANGES.find((r) => r[0] === range)?.[2]}</span>
           </div>
-          {items.map((s) => {
-            const slot = picked[s.product.slug]
-            const on = slot != null
-            return (
-              <button key={s.product.slug} type="button" className="wrow" aria-pressed={on} onClick={() => toggle(s.product.slug)}>
-                <i className="sw" style={on ? { background: slotColor(slot), borderColor: slotColor(slot) } : undefined} aria-hidden />
-                <span className="min-w-0 truncate font-semibold">{s.product.short_name}</span>
-                <span className="small tabular-nums">
-                  {money(s.avg)}/{s.product.unit}
-                </span>
-                <Change v={board.change[s.product.slug]} />
-              </button>
-            )
-          })}
+          <div className="watch-list">
+            {groups.map((g) => (
+              <div key={g.group} className="flex flex-col gap-0.5">
+                {groups.length > 1 && <span className="watch-head">{g.name}</span>}
+                {g.items.map((s) => {
+                  const slot = picked[s.product.slug]
+                  const on = slot != null
+                  return (
+                    <button key={s.product.slug} type="button" className="wrow" aria-pressed={on} onClick={() => toggle(s.product.slug)}>
+                      <i className="sw" style={on ? { background: slotColor(slot), borderColor: slotColor(slot) } : undefined} aria-hidden />
+                      <span className="min-w-0 truncate font-semibold">{s.product.short_name}</span>
+                      <span className="small tabular-nums">
+                        {money(s.avg)}/{s.product.unit}
+                      </span>
+                      <Change v={board.change[s.product.slug]} />
+                    </button>
+                  )
+                })}
+              </div>
+            ))}
+          </div>
           {full && (
             <p className="small m-0" role="status">
               You can compare {SLOTS} at once. Tap one to take it off first.

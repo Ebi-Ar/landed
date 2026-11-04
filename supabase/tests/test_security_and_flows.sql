@@ -234,7 +234,8 @@ begin
   assert v = 20, 'codes use the no-look-alike alphabet';
   perform public.admin_review_batch((select id from public.batches where status = 'held' limit 1), true);
   assert not exists (select 1 from public.batches where status = 'held'), 'held batch approved';
-  assert public.admin_run_price_index() = 10, 'index rebuilt for 10 products';
+  select count(*) into v from public.products;
+  assert public.admin_run_price_index() = v, 'index rebuilt for every product';
 end $$;
 reset role;
 select pg_temp.login(null);

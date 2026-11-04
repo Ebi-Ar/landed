@@ -1,4 +1,19 @@
-import type { DirectorySeller, PinKind, Product, SellerKind } from './types'
+import type { DirectorySeller, FoodGroup, PinKind, Product, SellerKind } from './types'
+
+/** Food groups in browsing order, with their names. */
+export const FOOD_GROUPS: Array<[FoodGroup, string]> = [
+  ['fish', 'Fish'],
+  ['seafood', 'Seafood'],
+  ['vegetables', 'Vegetables'],
+  ['fruit', 'Fruit'],
+  ['pantry', 'Pantry'],
+]
+export const foodGroupName = (g: FoodGroup) => FOOD_GROUPS.find(([k]) => k === g)?.[1] ?? g
+
+/** Split a list into food groups, in browsing order, skipping empty ones. */
+export function byFoodGroup<T>(items: T[], groupOf: (x: T) => FoodGroup) {
+  return FOOD_GROUPS.map(([g, name]) => ({ group: g, name, items: items.filter((x) => groupOf(x) === g) })).filter((x) => x.items.length)
+}
 
 export const money = (n: number | string) => '$' + Number(n).toFixed(2)
 

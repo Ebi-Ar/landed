@@ -3,6 +3,8 @@ export type SellerStatus = 'pending' | 'approved' | 'suspended'
 export type PinType = 'exact' | 'pickup'
 export type SiteKind = 'farm' | 'wharf'
 export type Category = 'sea' | 'land'
+/** What buyers browse by. Category (sea or land) still decides who may sell it. */
+export type FoodGroup = 'fish' | 'seafood' | 'vegetables' | 'fruit' | 'pantry'
 export type BatchStatus = 'live' | 'held' | 'sold_out' | 'removed'
 export type OrderStatus = 'ordered' | 'confirmed' | 'ready' | 'picked_up' | 'declined'
 export type CredentialType = 'fishing_licence' | 'vessel' | 'farm_registration' | 'aquaculture_lease'
@@ -79,6 +81,7 @@ export interface Product {
   short_name: string
   unit: string
   category: Category
+  food_group: FoodGroup
   icon: string
   harvest_verb: string
   season_months: number[]

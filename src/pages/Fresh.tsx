@@ -5,9 +5,11 @@ import { BatchCard } from '@/components/BatchCard'
 import { LocationPicker } from '@/components/LocationPicker'
 import { Chips, ErrorNote, Loading, PageTitle, SampleNote } from '@/components/ui'
 import { useBuyerLocation } from '@/lib/location'
+import { FOOD_GROUPS } from '@/lib/format'
 import { useCatalog, useLiveBatches, usePriceIndex } from '@/lib/queries'
+import type { FoodGroup } from '@/lib/types'
 
-type Filter = 'all' | 'open' | 'sea' | 'land'
+type Filter = 'all' | 'open' | FoodGroup
 
 export default function Fresh() {
   const cat = useCatalog()
@@ -28,9 +30,8 @@ export default function Fresh() {
       })
       .filter(({ s, p }) => {
         if (!p) return false
-        if (filter === 'sea' && p.category !== 'sea') return false
-        if (filter === 'land' && p.category !== 'land') return false
         if (filter === 'open' && !s?.available_now) return false
+        if (filter !== 'all' && filter !== 'open' && p.food_group !== filter) return false
         if (!needle) return true
         return [p.name, p.short_name, s?.display_name, s?.place_name, s?.area_label].join(' ').toLowerCase().includes(needle)
       })
@@ -60,12 +61,7 @@ export default function Fresh() {
         label="Filter listings"
         value={filter}
         onChange={setFilter}
-        options={[
-          ['all', 'All'],
-          ['open', 'Here now'],
-          ['sea', 'From the sea'],
-          ['land', 'From the land'],
-        ]}
+        options={[['all', 'All'], ['open', 'Here now'], ...FOOD_GROUPS]}
       />
       {batches.error ? <ErrorNote error={batches.error} /> : null}
       {batches.isLoading || cat.isLoading ? (

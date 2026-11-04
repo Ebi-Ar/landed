@@ -5,6 +5,7 @@ import { Anchor, Sprout, Tractor } from 'lucide-react'
 import { PendingNote } from '@/components/PendingNote'
 import { PinFields, type PinDraft } from '@/components/PinFields'
 import { ProductIcon } from '@/components/ProductIcon'
+import { byFoodGroup } from '@/lib/format'
 import { Alert, Loading, PageTitle, Switch } from '@/components/ui'
 import { useAuth } from '@/lib/auth'
 import { useMarkets, useProducts } from '@/lib/queries'
@@ -180,14 +181,19 @@ export default function Join() {
 
         <div className="card">
           <h2>Products</h2>
-          <div className="grid grid-cols-3 gap-2">
-            {catalogue.map((p) => (
-              <button key={p.slug} type="button" className={`pick ${p.category}`} aria-pressed={chosen.includes(p.slug)} onClick={() => setChosen((c) => toggle(c, p.slug))}>
-                <ProductIcon icon={p.icon} />
-                {p.short_name}
-              </button>
-            ))}
-          </div>
+          {byFoodGroup(catalogue, (p) => p.food_group).map((g) => (
+            <div key={g.group} className="flex flex-col gap-1.5">
+              <span className="small font-semibold">{g.name}</span>
+              <div className="grid grid-cols-3 gap-2">
+                {g.items.map((p) => (
+                  <button key={p.slug} type="button" className={`pick ${p.category}`} aria-pressed={chosen.includes(p.slug)} onClick={() => setChosen((c) => toggle(c, p.slug))}>
+                    <ProductIcon icon={p.icon} />
+                    {p.short_name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
 
         {landChosen.length > 0 && (

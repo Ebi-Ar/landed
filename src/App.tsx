@@ -10,6 +10,7 @@ const CatchNew = lazy(() => import('./pages/CatchNew'))
 const Catches = lazy(() => import('./pages/Catches'))
 const Buyer = lazy(() => import('./pages/Buyer'))
 const Trace = lazy(() => import('./pages/Trace'))
+const Pitch = lazy(() => import('./pages/Pitch'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 const Sell = lazy(() => import('./pages/locked/Sell'))
 const VesselWatch = lazy(() => import('./pages/locked/VesselWatch'))
@@ -38,6 +39,7 @@ export default function App() {
       <Suspense fallback={<PageFallback />}>
       <Routes>
         <Route path="/" element={<Landing />} />
+        <Route path="/pitch" element={<Pitch />} />
         <Route path="/trace/:tagId" element={<Trace />} />
         <Route path="/trace" element={<Navigate to="/app/buyer" replace />} />
         <Route path="/app" element={<Layout />}>

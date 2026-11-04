@@ -219,7 +219,12 @@ export default function Landing() {
       <footer className="border-t border-line">
         <div className="mx-auto flex max-w-[1200px] flex-col gap-3 px-4 py-8 text-[12.5px] text-ink-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <Logo size={22} />
-          <p>Hackathon build. All prices, people and catches are illustrative sample data.</p>
+          <p>
+            Hackathon build. All prices, people and catches are illustrative sample data. ·{' '}
+            <Link to="/pitch" className="font-medium text-teal-600 hover:text-teal-700">
+              Pitch deck
+            </Link>
+          </p>
         </div>
       </footer>
     </div>

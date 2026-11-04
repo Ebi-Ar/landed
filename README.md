@@ -32,6 +32,11 @@ npm run seed         # regenerate prices/catches/listings (deterministic)
 A catch logged on the laptop lives in that browser's localStorage, so the QR link carries the catch itself:
 `/trace/CC-25-0413-SHD?d=<base64url JSON>`. The provenance page resolves a tag in order: **URL data → localStorage → seeded `catches.json` → "Tag not found"**.
 
+## Pitch deck
+
+The six-slide pitch is built into the app at **`/pitch`** (e.g. `https://catch-chain.vercel.app/pitch`).
+→ / ← or Space to move, **F** for fullscreen, **N** for speaker notes. Slide 4 has a **Launch demo** button (opens the app in a new tab) and a QR for the demo tag. `#3` in the URL opens slide 3.
+
 ## Demo script (~2 min)
 
 1. Landing → keep **Demo mode** on → **Launch demo** (resets sample data, opens Market Pulse on lobster).

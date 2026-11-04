@@ -1,7 +1,7 @@
 import { Anchor, Clock, MapPin, Navigation, Store, Warehouse } from 'lucide-react'
 import { BatchCard } from './BatchCard'
 import { CallBox } from './CallBox'
-import { Alert } from './ui'
+import { Alert, ErrorNote } from './ui'
 import { useBuyerLocation } from '@/lib/location'
 import { useCatalog, useLiveBatches, usePriceIndex } from '@/lib/queries'
 import { FAR_KM } from '@/lib/geo'
@@ -13,6 +13,16 @@ export function directionsHref(lat: number, lng: number) {
   return ios ? `https://maps.apple.com/?daddr=${lat},${lng}` : `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`
 }
 
+/** Grey cards while listings load. The sheet is already the surface colour, so these use the second surface. */
+function Placeholders() {
+  return (
+    <div className="flex flex-col gap-2.5">
+      <div className="h-[76px] animate-pulse rounded-2xl bg-surface-2" />
+      <div className="h-[76px] animate-pulse rounded-2xl bg-surface-2" />
+    </div>
+  )
+}
+
 const KIND_ICON: Record<PinKind, typeof Anchor> = { wharf: Anchor, farm: Warehouse, pickup: MapPin, market: Store }
 
 /** What a buyer sees after tapping a pin: seller or market details, Call, what's for sale, Directions. */
@@ -21,6 +31,16 @@ export function PinSheet({ id, onPick }: { id: string; onPick: (id: string) => v
   const loc = useBuyerLocation()
   const batches = useLiveBatches()
   const { summary } = usePriceIndex()
+
+  // A shared pin link can open before the sellers and markets have loaded.
+  if (cat.isLoading)
+    return (
+      <div className="flex flex-col gap-3" aria-busy="true" aria-label="Loading this pin">
+        <div className="h-7 w-48 animate-pulse rounded-lg bg-surface-2" />
+        <Placeholders />
+      </div>
+    )
+  if (cat.error && !cat.sellers.length) return <ErrorNote error={cat.error} />
 
   if (id.startsWith('m:')) {
     const m = cat.marketById[id.slice(2)]
@@ -105,13 +125,21 @@ export function PinSheet({ id, onPick }: { id: string; onPick: (id: string) => v
       )}
       <CallBox phone={s.phone} big />
       <h3>Available now</h3>
-      <div className="flex flex-col gap-2.5">
-        {items.map((b) => {
-          const p = cat.productBySlug[b.product_id]
-          return p ? <BatchCard key={b.id} batch={b} product={p} seller={s} distance={d} price={summary?.[p.slug]} /> : null
-        })}
-        {!items.length && <p className="sub">Nothing listed right now.</p>}
-      </div>
+      {batches.error && !batches.data ? (
+        <ErrorNote error={batches.error} />
+      ) : batches.isPending ? (
+        <div aria-busy="true" aria-label="Loading what’s for sale">
+          <Placeholders />
+        </div>
+      ) : (
+        <div className="flex flex-col gap-2.5">
+          {items.map((b) => {
+            const p = cat.productBySlug[b.product_id]
+            return p ? <BatchCard key={b.id} batch={b} product={p} seller={s} distance={d} price={summary?.[p.slug]} /> : null
+          })}
+          {!items.length && <p className="sub">Nothing listed right now.</p>}
+        </div>
+      )}
       <a className="btn alt" href={directionsHref(s.lat, s.lng)} target="_blank" rel="noreferrer">
         <Navigation /> Directions
       </a>

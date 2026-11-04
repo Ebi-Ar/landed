@@ -6,7 +6,7 @@ import { Sheet } from '@/components/Sheet'
 import { Chips, ErrorNote, PageTitle, SampleNote } from '@/components/ui'
 import type { MapPin } from '@/components/SellerMap'
 import { useBuyerLocation } from '@/lib/location'
-import { useCatalog } from '@/lib/queries'
+import { useCatalog, useLiveBatches } from '@/lib/queries'
 import { pinKind, pinWord } from '@/lib/format'
 
 const SellerMap = lazy(() => import('@/components/SellerMap'))
@@ -15,6 +15,8 @@ type Filter = 'all' | 'open' | 'sea' | 'land' | 'markets'
 
 export default function MapPage() {
   const cat = useCatalog()
+  // Start loading what's for sale with the map, so a pin opens with its listings ready.
+  useLiveBatches()
   const loc = useBuyerLocation()
   const [params, setParams] = useSearchParams()
   const [filter, setFilter] = useState<Filter>('all')

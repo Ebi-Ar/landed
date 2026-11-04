@@ -1,8 +1,0 @@
-[
-  { "id": "v1", "name": "Marie-Claire II", "fisher": "Marc Leblanc", "homePort": "shediac", "licenceArea": "LFA 25", "cfv": "CFV 104512" },
-  { "id": "v2", "name": "Belle Acadienne", "fisher": "Josée Cormier", "homePort": "cap-pele", "licenceArea": "LFA 25", "cfv": "CFV 108837" },
-  { "id": "v3", "name": "Sea Harvester", "fisher": "Tom MacDonald", "homePort": "pictou", "licenceArea": "LFA 26A", "cfv": "CFV 112093" },
-  { "id": "v4", "name": "Island Pride", "fisher": "Kevin Gallant", "homePort": "souris", "licenceArea": "LFA 26A", "cfv": "CFV 097461" },
-  { "id": "v5", "name": "Lady Chaleur", "fisher": "Luc Robichaud", "homePort": "caraquet", "licenceArea": "CFA 12", "cfv": "CFV 101278" },
-  { "id": "v6", "name": "Fundy Dawn", "fisher": "Sarah Doucette", "homePort": "yarmouth", "licenceArea": "LFA 34", "cfv": "CFV 115640" }
-]

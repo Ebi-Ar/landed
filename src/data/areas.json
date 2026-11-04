@@ -1,9 +1,0 @@
-[
-  { "id": "LFA 23", "code": "23", "label": "LFA 23 · Chaleur Bay", "lat": 47.86, "lng": -64.62 },
-  { "id": "LFA 24", "code": "24", "label": "LFA 24 · North PEI", "lat": 46.62, "lng": -63.4 },
-  { "id": "LFA 25", "code": "25", "label": "LFA 25 · Northumberland Strait", "lat": 46.31, "lng": -64.33 },
-  { "id": "LFA 26A", "code": "26A", "label": "LFA 26A · East Northumberland", "lat": 45.95, "lng": -62.52 },
-  { "id": "LFA 34", "code": "34", "label": "LFA 34 · Southwest Nova Scotia", "lat": 43.62, "lng": -66.38 },
-  { "id": "CFA 12", "code": "12", "label": "CFA 12 · Southern Gulf (snow crab)", "lat": 48.1, "lng": -63.8 },
-  { "id": "SFA 29", "code": "29", "label": "SFA 29 · Scallop area, SW Nova", "lat": 43.55, "lng": -65.95 }
-]

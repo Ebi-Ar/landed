@@ -1,22 +1,21 @@
-import { cn } from '@/lib/utils'
+import { clsx as cn } from 'clsx'
 
-export function LogoMark({ size = 28, className }: { size?: number; className?: string }) {
+/** Landed mark: two waves (the sea) under a sprouting leaf (the land). */
+export function LogoMark({ size = 26, className }: { size?: number; className?: string }) {
   return (
-    <svg viewBox="0 0 32 32" width={size} height={size} className={className} aria-hidden>
-      <rect width="32" height="32" rx="8" fill="#13A89E" />
-      <path d="M6 19c2.5-3 5-3 7.5 0s5 3 7.5 0 3.5-2.2 5-1.2" fill="none" stroke="#0B2545" strokeWidth="2.6" strokeLinecap="round" />
-      <path d="M6 13c2.5-3 5-3 7.5 0s5 3 7.5 0 3.5-2.2 5-1.2" fill="none" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" />
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" aria-hidden className={className}>
+      <path d="M3 16c2-2 4-2 6 0s4 2 6 0 4-2 6 0" stroke="var(--tide)" />
+      <path d="M3 20c2-2 4-2 6 0s4 2 6 0 4-2 6 0" stroke="var(--tide)" />
+      <path d="M12 12c0-4 2-7 6-8-1 4-3 7-6 8zM12 12C12 9 10 7 7 6c0 3 2 5 5 6z" stroke="var(--kelp)" />
     </svg>
   )
 }
 
-export function Logo({ light = false, size = 28, className }: { light?: boolean; size?: number; className?: string }) {
+export function Logo({ size = 26, className }: { size?: number; className?: string }) {
   return (
-    <span className={cn('inline-flex items-center gap-2.5', className)}>
+    <span className={cn('inline-flex items-center gap-[7px] font-display text-[20px] font-bold tracking-[-0.02em] text-ink', className)}>
       <LogoMark size={size} />
-      <span className={cn('text-[17px] font-bold tracking-[-0.02em]', light ? 'text-white' : 'text-navy-900')}>
-        Catch<span className={light ? 'text-teal-200' : 'text-teal-500'}>Chain</span>
-      </span>
+      Landed
     </span>
   )
 }

@@ -1,7 +1,0 @@
-[
-  { "id": "lobster", "name": "Lobster", "latin": "Homarus americanus", "unit": "lb", "season": "Spring and fall seasons, varies by LFA", "image": "lobster" },
-  { "id": "snow-crab", "name": "Snow crab", "latin": "Chionoecetes opilio", "unit": "lb", "season": "April to July in the southern Gulf", "image": "crab" },
-  { "id": "scallops", "name": "Scallops", "latin": "Placopecten magellanicus", "unit": "lb", "season": "Year-round in the Bay of Fundy, meat weight", "image": "scallop" },
-  { "id": "mackerel", "name": "Mackerel", "latin": "Scomber scombrus", "unit": "lb", "season": "Summer to early fall, bait and food", "image": "fish" },
-  { "id": "oysters", "name": "Oysters", "latin": "Crassostrea virginica", "unit": "each", "season": "Spring to late fall, priced per piece", "image": "oyster" }
-]

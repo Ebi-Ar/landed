@@ -1,88 +1,42 @@
-import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import { portById } from '@/lib/data'
-import { fmtDate } from '@/lib/dates'
-import { fmtMoney } from '@/lib/utils'
+import { Area, ComposedChart, Line, ReferenceArea, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { money } from '@/lib/format'
 
-export const SERIES_COLORS = ['#13A89E', '#0B2545', '#5B8DEF', '#9B7BD4', '#E58A4E', '#4FB3D9', '#8AA0B8', '#C46FA8']
-
-export function portColor(portIds: string[], id: string) {
-  return SERIES_COLORS[portIds.indexOf(id) % SERIES_COLORS.length]
-}
-
-interface Props {
-  rows: Record<string, number | string>[]
-  portIds: string[]
-  highlight?: string
-  unit: string
-  height?: number
-}
-
-function ChartTooltip({ active, payload, label, unit }: { active?: boolean; payload?: { dataKey: string; value: number; color: string }[]; label?: string; unit: string }) {
-  if (!active || !payload?.length) return null
-  const sorted = [...payload].sort((a, b) => b.value - a.value)
+/** 30-day chart: daily average price, with today's fair range shaded. */
+export default function PriceChart({ history, low, high, label }: { history: number[]; low: number; high: number; label: string }) {
+  const data = history.map((v, i) => ({ i, v, day: i === history.length - 1 ? 'Today' : `${history.length - 1 - i} days ago` }))
+  const mn = Math.min(low, ...history)
+  const mx = Math.max(high, ...history)
+  const pad = (mx - mn) * 0.15 || 0.5
   return (
-    <div className="min-w-[180px] rounded-[10px] border border-line bg-white px-3 py-2.5 shadow-pop">
-      <p className="mb-1.5 text-[12px] font-semibold text-ink-3">{label && fmtDate(label, { weekday: 'short', month: 'short', day: 'numeric' })}</p>
-      {sorted.map((p) => (
-        <div key={p.dataKey} className="flex items-center justify-between gap-4 py-0.5 text-[12.5px]">
-          <span className="flex items-center gap-2 text-ink-2">
-            <span className="size-2 rounded-full" style={{ background: p.color }} />
-            {portById[p.dataKey]?.name}
-          </span>
-          <span className="tabular font-semibold text-ink">
-            {fmtMoney(p.value)}
-            <span className="font-normal text-ink-4">/{unit}</span>
-          </span>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-export function PriceChart({ rows, portIds, highlight, unit, height = 300 }: Props) {
-  const values = rows.flatMap((r) => portIds.map((p) => r[p] as number).filter((v) => typeof v === 'number'))
-  const min = Math.min(...values)
-  const max = Math.max(...values)
-  const pad = (max - min) * 0.12 || 0.1
-  const span = rows.length
-  return (
-    <div style={{ height }} className="w-full">
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={rows} margin={{ top: 8, right: 8, bottom: 0, left: -8 }}>
-          <CartesianGrid stroke="#EEF2F6" vertical={false} />
+    <div role="img" aria-label={`${label}: average price over the last 30 days, from ${money(history[0] ?? 0)} to ${money(history.at(-1) ?? 0)}, with today's fair range ${money(low)} to ${money(high)} shaded`}>
+      <ResponsiveContainer width="100%" height={180}>
+        <ComposedChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
+          <ReferenceArea y1={low} y2={high} fill="var(--kelp-soft)" fillOpacity={1} stroke="var(--line)" ifOverflow="extendDomain" />
           <XAxis
-            dataKey="date"
+            dataKey="i"
             tickLine={false}
             axisLine={false}
-            tick={{ fill: '#8A9BB0', fontSize: 11.5 }}
-            tickFormatter={(d: string) => fmtDate(d, { month: 'short', day: 'numeric' })}
-            minTickGap={span > 40 ? 40 : 24}
-            dy={6}
+            ticks={[0, data.length - 1]}
+            tickFormatter={(i: number) => (i === 0 ? '30 days ago' : 'Today')}
+            tick={{ fontSize: 10, fill: 'var(--muted)' }}
           />
           <YAxis
+            domain={[mn - pad, mx + pad]}
+            ticks={[low, high]}
+            tickFormatter={(v: number) => money(v)}
             tickLine={false}
             axisLine={false}
-            tick={{ fill: '#8A9BB0', fontSize: 11.5 }}
-            tickFormatter={(v: number) => `$${v < 2 ? v.toFixed(2) : v.toFixed(v < 10 ? 2 : 0)}`}
-            domain={[Math.max(0, min - pad), max + pad]}
-            width={56}
+            width={48}
+            tick={{ fontSize: 10, fill: 'var(--muted)' }}
           />
-          <Tooltip content={<ChartTooltip unit={unit} />} cursor={{ stroke: '#D3DBE4', strokeDasharray: '3 3' }} />
-          {portIds.map((p) => (
-            <Line
-              key={p}
-              type="monotone"
-              dataKey={p}
-              stroke={portColor(portIds, p)}
-              strokeWidth={highlight ? (p === highlight ? 2.6 : 1.4) : 2}
-              strokeOpacity={highlight && p !== highlight ? 0.45 : 1}
-              dot={false}
-              activeDot={{ r: 4, strokeWidth: 2, stroke: '#fff' }}
-              isAnimationActive
-              animationDuration={600}
-            />
-          ))}
-        </LineChart>
+          <Tooltip
+            formatter={(v) => [money(Number(v)), 'Average']}
+            labelFormatter={(i) => data[Number(i)]?.day ?? ''}
+            contentStyle={{ background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: 10, fontSize: 12 }}
+          />
+          <Area dataKey="v" type="monotone" stroke="none" fill="transparent" isAnimationActive={false} />
+          <Line dataKey="v" type="monotone" stroke="var(--tide)" strokeWidth={2} dot={false} activeDot={{ r: 4 }} isAnimationActive={false} />
+        </ComposedChart>
       </ResponsiveContainer>
     </div>
   )

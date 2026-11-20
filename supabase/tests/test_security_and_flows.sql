@@ -260,4 +260,29 @@ begin
 end $$;
 reset role;
 
+-- Nightly reset: only from the server, only at the set Moncton hour, only while switched on.
+select pg_temp.login('10000000-0000-4000-8000-000000000001');
+set role authenticated;
+do $$ begin
+  perform pg_temp.expect_error('select private.nightly_demo_reset()', '%permission denied%');
+end $$;
+reset role;
+select pg_temp.login(null);
+do $$
+declare hr int := extract(hour from now() at time zone 'America/Moncton');
+begin
+  delete from public.orders;
+  update private.settings set value = to_jsonb((hr + 1) % 24) where key = 'demo.reset_hour';
+  assert not private.nightly_demo_reset(), 'no reset outside the set hour';
+  assert not exists (select 1 from public.orders), 'nothing restored outside the set hour';
+  update private.settings set value = to_jsonb(hr) where key = 'demo.reset_hour';
+  update private.settings set value = 'false' where key = 'demo.nightly_reset';
+  assert not private.nightly_demo_reset(), 'no reset while switched off';
+  update private.settings set value = 'true' where key = 'demo.nightly_reset';
+  assert private.nightly_demo_reset(), 'resets at the set hour';
+  assert (select count(*) from public.orders) = 4, 'seed orders restored by the nightly reset';
+  assert exists (select 1 from private.admin_log where action = 'reset_demo' and admin_id is null and details @> '{"automatic": true}'),
+    'automatic reset is logged';
+end $$;
+
 select 'security and flow checks passed' as result;

@@ -64,7 +64,9 @@ Vercel deploys from GitHub as before. In **Project → Settings → Environment 
 
 The sign-in page has one-tap buttons for the first three. Marc and Lise each have a demo roll of 50 blank labels. The codes stay the same after every reset, so a printed sheet keeps working. To print it, go to **Admin → Label rolls → Print sheet**.
 
-**Admin → Demo → Reset demo** restores the sample world before each pitch, with times relative to now, so "Landed 2 h ago" is true again.
+**Admin → Demo → Reset demo** restores the sample world before each pitch, with times relative to now, so "Landed 2 h ago" is true again. The server also does this by itself every morning at 6 a.m. Moncton time (pg_cron), so anyone who opens the live site later still sees fresh listings. Change the hour or turn it off with `demo.reset_hour` and `demo.nightly_reset` in `supabase/thresholds.sql`.
+
+On the demo phones, open the site and use **Add to Home Screen** (Safari's share menu, or Chrome's menu). Landed then opens full screen with its own icon: sellers land on **Today**, everyone else on the map.
 
 ## Demo script (about 3 minutes, two phones)
 
@@ -124,11 +126,14 @@ supabase/migrations/         schema + RLS, server functions, sample world, stora
 supabase/thresholds.sql      every tunable number in one place
 supabase/seed.sql            loads the sample world (re-runnable)
 supabase/tests/              local Postgres test harness and checks
+scripts/images/              sources for the link preview (og.png) and home-screen icons; rebuild with make.sh
 ```
+
+The link preview points at `https://landed-nb.vercel.app/og.png` (set in `index.html`). Change it there if the live address changes.
 
 ## Before the pilot
 
 - The map uses OpenFreeMap (free, no key, no usage cap, but no uptime guarantee). If the pilot needs one, self-host the tiles or move to a paid provider.
-- Set `checks.demo_skip_photo_place` to `false` in `supabase/thresholds.sql`.
+- Set `checks.demo_skip_photo_place` and `demo.nightly_reset` to `false` in `supabase/thresholds.sql`. The morning reset removes every batch, order, label and scan, not only the sample ones.
 - Replace the sample product season months with real DFO and provincial seasons.
 - Check Canadian privacy rules for seller and buyer data, and add a privacy notice to sign-up.

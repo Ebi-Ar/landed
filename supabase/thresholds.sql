@@ -29,5 +29,9 @@ insert into private.settings (key, value, note) values
   ('rate.scans_per_10min',        '60',   'Label-page lookups per device/network in 10 minutes.'),
   ('rate.label_checks_per_hour',  '120',  'Blank-label checks per seller per hour.'),
   ('rate.batches_per_hour',       '30',   'New batches per seller per hour.'),
-  ('rate.orders_per_hour',        '20',   'Orders per buyer per hour.')
+  ('rate.orders_per_hour',        '20',   'Orders per buyer per hour.'),
+
+  -- Demo
+  ('demo.nightly_reset',          'true', 'Restore the sample world every morning, like Admin → Demo → Reset demo. Set to false for the pilot: a reset removes every batch, order, label and scan.'),
+  ('demo.reset_hour',             '6',    'Hour of the morning reset, Moncton time (0–23).')
 on conflict (key) do update set value = excluded.value, note = excluded.note;

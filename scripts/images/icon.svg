@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Source for the home-screen icons (same mark as src/components/Logo.tsx). Full-bleed square:
+       iOS and Android round the corners themselves. The mark is scaled to stay inside Android's
+       maskable safe zone (the middle 80% circle). -->
+  <rect width="24" height="24" fill="#0F2A33"/>
+  <g transform="translate(12 12) scale(0.72) translate(-12 -12.5)">
+    <path d="M3 16c2-2 4-2 6 0s4 2 6 0 4-2 6 0" stroke="#5FB7D0"/>
+    <path d="M3 20c2-2 4-2 6 0s4 2 6 0 4-2 6 0" stroke="#5FB7D0"/>
+    <path d="M12 12c0-4 2-7 6-8-1 4-3 7-6 8zM12 12C12 9 10 7 7 6c0 3 2 5 5 6z" stroke="#6CC797"/>
+  </g>
+</svg>

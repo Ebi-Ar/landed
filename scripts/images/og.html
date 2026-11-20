@@ -1,0 +1,79 @@
+<!doctype html>
+<!-- Source for public/og.png, the 1200×630 link preview. Rebuild with scripts/images/make.sh. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=block" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0f2a33; --ink-2: #163a46; --text: #e7f1f2; --muted: #93aab0;
+    --tide: #5fb7d0; --kelp: #6cc797;
+    --card: #ffffff; --card-ink: #0f2a33; --card-muted: #5a7078; --line: #d7e2e3;
+    --sea-soft: #dcedf1; --sea: #14627a; --kelp-soft: #dff0e6; --kelp-dark: #2e7a55;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    background: radial-gradient(900px 520px at 100% 100%, #14424f 0%, transparent 70%), var(--ink);
+    color: var(--text); font-family: Figtree, system-ui, sans-serif;
+    display: grid; grid-template-columns: 1fr 440px; gap: 56px; align-items: center; padding: 64px 72px;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 34px; letter-spacing: -0.02em; }
+  .eyebrow { display: inline-block; margin-top: 34px; padding: 6px 12px; border-radius: 999px; background: rgba(95,183,208,.16); color: var(--tide); font-weight: 600; font-size: 18px; }
+  h1 { margin-top: 18px; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 60px; line-height: 1.02; letter-spacing: -0.03em; }
+  p { margin-top: 22px; color: var(--muted); font-size: 23px; line-height: 1.4; max-width: 560px; }
+
+  .card { background: var(--card); color: var(--card-ink); border-radius: 26px; padding: 30px; box-shadow: 0 24px 60px rgba(0,0,0,.35); }
+  .head { display: flex; align-items: center; gap: 18px; }
+  .tile { width: 84px; height: 84px; border-radius: 20px; background: var(--sea-soft); display: grid; place-items: center; flex: none; }
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--kelp-soft); color: var(--kelp-dark); font-weight: 600; font-size: 15px; }
+  .name { display: block; margin-top: 6px; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 28px; }
+  .code { display: block; margin-top: 2px; font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 17px; color: var(--card-muted); letter-spacing: .04em; }
+  ol { list-style: none; padding: 0; margin-top: 24px; display: grid; gap: 18px; position: relative; }
+  ol::before { content: ''; position: absolute; left: 8px; top: 10px; bottom: 26px; width: 2px; background: var(--line); }
+  li { position: relative; padding-left: 34px; }
+  li::before { content: ''; position: absolute; left: 0; top: 4px; width: 18px; height: 18px; border-radius: 50%; background: var(--kelp-dark); }
+  li.todo::before { background: var(--line); }
+  li b { display: block; font-size: 19px; }
+  li span { display: block; margin-top: 2px; font-size: 16px; color: var(--card-muted); }
+</style>
+</head>
+<body>
+  <div>
+    <div class="brand">
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M3 16c2-2 4-2 6 0s4 2 6 0 4-2 6 0" stroke="#5FB7D0" />
+        <path d="M3 20c2-2 4-2 6 0s4 2 6 0 4-2 6 0" stroke="#5FB7D0" />
+        <path d="M12 12c0-4 2-7 6-8-1 4-3 7-6 8zM12 12C12 9 10 7 7 6c0 3 2 5 5 6z" stroke="#6CC797" />
+      </svg>
+      Landed
+    </div>
+    <span class="eyebrow">New Brunswick fishers and farmers</span>
+    <h1>Local food, straight from the boat and the field.</h1>
+    <p>Find it on a map, order for pickup, and scan any label to see exactly where it came from.</p>
+  </div>
+
+  <div class="card">
+    <div class="head">
+      <div class="tile">
+        <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#14627A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 21v-6M9 21l3-3 3 3M12 15c-2.5 0-4-2-4-5s1.5-5 4-5 4 2 4 5-1.5 5-4 5zM8 8C5 7 4 4 5 2c1 2 2 3 4 3M16 8c3-1 4-4 3-6-1 2-2 3-4 3M8 11H4M16 11h4M8 13l-3 2M16 13l3 2" />
+        </svg>
+      </div>
+      <div>
+        <span class="badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="m8.5 12 2.5 2.5 4.5-5" /></svg>
+          Verified local catch
+        </span>
+        <span class="name">Live lobster</span>
+        <span class="code">LD-8F3K2Q</span>
+      </div>
+    </div>
+    <ol>
+      <li><b>Caught</b><span>Lobster Fishing Area 25</span></li>
+      <li><b>Landed</b><span>Pointe-du-Chêne wharf, today</span></li>
+      <li class="todo"><b>With you</b><span>After pickup</span></li>
+    </ol>
+  </div>
+</body>
+</html>

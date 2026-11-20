@@ -317,6 +317,10 @@ function Demo() {
           and Lise (same codes as the printed sheet) and 30 days of prices. Removes every batch, order, label and scan made since. Real sign-ups keep their
           accounts.
         </p>
+        <p className="small m-0">
+          The server also does this by itself every morning at 6 (Moncton time), so the sample times stay true. Turn that off for the pilot with{' '}
+          <code>demo.nightly_reset</code> in <code>supabase/thresholds.sql</code>.
+        </p>
         {reset.error && <Alert tone="bad">{errorMessage(reset.error)}</Alert>}
         <button
           className="btn bad"

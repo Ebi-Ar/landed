@@ -37,6 +37,13 @@ function ScrollToTop() {
   return null
 }
 
+/** Where the home-screen app opens (manifest start_url): sellers on Today, everyone else on the map. */
+function Start() {
+  const { ready, seller, meLoading } = useAuth()
+  if (!ready || meLoading) return <Loading />
+  return <Navigate to={seller ? '/sell' : '/map'} replace />
+}
+
 /** Signed-in only. Sends people to sign in and back. */
 function RequireAuth({ children }: { children: ReactNode }) {
   const { ready, userId } = useAuth()
@@ -77,6 +84,7 @@ export default function App() {
       <Suspense fallback={<div className="mx-auto max-w-[680px] p-4"><Loading /></div>}>
         <Routes>
           <Route path="/" element={<Landing />} />
+          <Route path="/start" element={<Start />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/l/:code" element={<LabelRoute />} />
